@@ -8,3 +8,5 @@ export * from './BaseSurfaceItem';
 export * from './SurfaceItem';
 export * from './Location';
 export * from './ItemState';
+export * from './SurfaceItemFactory';
+export * from './SurfaceItemFactoryImpl';

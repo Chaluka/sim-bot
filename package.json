@@ -2,8 +2,8 @@
     "name": "sim-bot",
     "version": "1.0.0",
     "description": "A simulation app that visualizes a robot moving on a grid based on user commands.",
-    "main": "index.js",
     "type": "module",
+    "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
         "start": "node dist/index.js",
@@ -14,7 +14,7 @@
         "prepare": "husky install"
     },
     "keywords": [],
-    "author": "",
+    "author": "chaluka",
     "license": "ISC",
     "devDependencies": {
         "@eslint/js": "^9.31.0",
@@ -24,6 +24,7 @@
         "eslint": "^9.31.0",
         "eslint-config-prettier": "^10.1.5",
         "eslint-plugin-import": "^2.32.0",
+        "eslint-plugin-jest": "^28.14.0",
         "eslint-plugin-prettier": "^5.5.1",
         "eslint-plugin-spellcheck": "^0.0.20",
         "husky": "^8.0.0",

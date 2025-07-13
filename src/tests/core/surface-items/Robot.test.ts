@@ -3,11 +3,17 @@ import { Robot } from '../../../core/surface-items/Robot';
 import { Rotation } from '../../../core/surface-items/Rotation';
 
 describe('Robot', () => {
-    describe('place', () => {
+    describe('setters', () => {
         it('should place the robot at the specified location', () => {
             const robot = new Robot('1', { x: 0, y: 0 }, Direction.NORTH);
-            robot.place({ x: 5, y: 5 });
+            robot.location = { x: 5, y: 5 };
             expect(robot.location).toEqual({ x: 5, y: 5 });
+        });
+
+        it("should change the robot's direction", () => {
+            const robot = new Robot('1', { x: 0, y: 0 }, Direction.NORTH);
+            robot.direction = Direction.EAST;
+            expect(robot.direction).toBe(Direction.EAST);
         });
     });
 

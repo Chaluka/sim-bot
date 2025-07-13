@@ -1,7 +1,6 @@
-import { Direction } from './Direction';
+import { Location } from './Location';
 
 export interface Movable {
-    direction: Direction;
-    step: number;
     move(): void;
+    nextMove(): Location;
 }

@@ -11,22 +11,14 @@ export class Robot extends BaseSurfaceItem implements Movable, Rotatable {
     constructor(
         id: string,
         location: Location,
-        private _direction: Direction,
+        direction: Direction,
         private _step: number = 1
     ) {
-        super(id, location);
-    }
-
-    public get direction(): Direction {
-        return this._direction;
-    }
-
-    public get step(): number {
-        return this._step;
+        super(id, location, direction);
     }
 
     public move(): void {
-        this._location = this.getNextLocation();
+        this._location = this.nextMove();
     }
 
     public rotate(rotation: Rotation): void {
@@ -35,26 +27,26 @@ export class Robot extends BaseSurfaceItem implements Movable, Rotatable {
 
     public report(): ItemState {
         return {
-            id: this.id,
-            location: this.location,
-            direction: this.direction,
+            id: this._id,
+            location: this._location,
+            direction: this._direction,
         };
     }
 
-    public getNextLocation(): Location {
-        const { x, y } = this.location;
+    public nextMove(): Location {
+        const { x, y } = this._location;
 
-        switch (this.direction) {
+        switch (this._direction) {
             case Direction.NORTH:
-                return { x, y: y + this.step };
+                return { x, y: y + this._step };
             case Direction.SOUTH:
-                return { x, y: y - this.step };
+                return { x, y: y - this._step };
             case Direction.EAST:
-                return { x: x + this.step, y };
+                return { x: x + this._step, y };
             case Direction.WEST:
-                return { x: x - this.step, y };
+                return { x: x - this._step, y };
             default:
-                throw new Error(`Unknown direction: ${this.direction}`);
+                throw new Error(`Unknown direction: ${this._direction}`);
         }
     }
 }

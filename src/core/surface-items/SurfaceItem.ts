@@ -1,9 +1,10 @@
 import { Location } from './Location';
 import { ItemState } from './ItemState';
+import { Direction } from './Direction';
 
 export interface SurfaceItem {
     id: string;
     location: Location;
-    place(location: Location): void;
+    direction: Direction;
     report(): ItemState;
 }
