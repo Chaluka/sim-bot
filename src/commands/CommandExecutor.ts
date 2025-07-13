@@ -1,11 +1,4 @@
-import {
-    ItemStatus,
-    Rotation,
-    SurfaceItem,
-    SurfaceItemFactory,
-    SurfaceItemType,
-    SurfaceItemUtil,
-} from '../core/surface-items';
+import { Rotation, SurfaceItem, SurfaceItemFactory, SurfaceItemType, SurfaceItemUtil } from '../core/surface-items';
 import { Surface } from '../core/surfaces';
 import { ErrorHandler } from '../utils';
 import { Command } from './Command';
@@ -64,13 +57,10 @@ export class CommandExecutor {
                     command.location,
                     command.direction
                 );
-            } else if (this._surface.isValidPlacement(command.location)) {
-                surfaceItem.location = command.location;
-                if (SurfaceItemUtil.isMovableOrRotatable(surfaceItem)) {
-                    surfaceItem.direction = command.direction;
-                }
-            } else {
-                throw new Error(CommandExecutionErrors.ITEM_CANNOT_BE_PLACED);
+            }
+            surfaceItem.location = command.location;
+            if (SurfaceItemUtil.isMovableOrRotatable(surfaceItem)) {
+                surfaceItem.direction = command.direction;
             }
             this._surface.placeItem(surfaceItem);
             return this.createCommandExecutionResult(CommandType.PLACE, surfaceItem);

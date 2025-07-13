@@ -14,12 +14,17 @@ export class CLUserInterface implements UserInterface {
 
     public prompt(callback: (input: string) => CommandExecutionResult): void {
         this.readline.question('Command: ', (input) => {
-            const { success, command, ...rest } = callback(input);
-            if (success && command === CommandType.REPORT) {
-                const { itemStatus, ..._ } = rest;
-                console.log(`Output : ${itemStatus?.location.x},${itemStatus?.location.y},${itemStatus?.direction}`);
+            const result = callback(input);
+            if (result.success && result.command === CommandType.REPORT) {
+                const output = this.format(result);
+                console.log(output);
             }
             this.prompt(callback);
         });
+    }
+
+    public format(result: CommandExecutionResult): string {
+        const { itemStatus } = result;
+        return `Output : ${itemStatus?.location.x},${itemStatus?.location.y},${itemStatus?.direction}`;
     }
 }

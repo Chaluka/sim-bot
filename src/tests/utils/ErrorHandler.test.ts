@@ -1,4 +1,3 @@
-import { CommandType } from '../../commands';
 import { PlacementExecutionError } from '../../commands/CommandExecutionErrors';
 import { ErrorHandler } from '../../utils/ErrorHandler';
 

@@ -24,6 +24,7 @@ export class SimulatorApp {
         this._session = new SessionImpl({
             surface,
             surfaceItemFactory: new SurfaceItemFactoryImpl(),
+            userInterface: this._configs.userInterface,
         });
         this._session.run();
     }

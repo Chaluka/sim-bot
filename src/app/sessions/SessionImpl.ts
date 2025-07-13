@@ -1,5 +1,5 @@
 import { CommandExecutor } from '../../commands';
-import { CLUserInterface, UserInterface } from '../io';
+import { UserInterface } from '../io';
 import { Session } from './Session';
 import { SessionStatus } from './SessionStatus';
 import { SessionConfigs } from './SesstionConfigs';
@@ -13,7 +13,7 @@ export class SessionImpl implements Session {
     constructor(configs: SessionConfigs) {
         this._executor = new CommandExecutor(configs.surface, configs.surfaceItemFactory);
         this._sessionId = this.generateSessionId();
-        this._userInterface = new CLUserInterface();
+        this._userInterface = configs.userInterface;
     }
 
     private generateSessionId(): string {

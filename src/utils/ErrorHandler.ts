@@ -1,4 +1,4 @@
-import { CommandExecutionResult, CommandType } from '../commands';
+import { CommandExecutionResult } from '../commands';
 
 export class ErrorHandler {
     public static handleExecutionError(error: Error): CommandExecutionResult {
