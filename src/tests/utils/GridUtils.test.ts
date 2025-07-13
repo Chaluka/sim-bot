@@ -1,4 +1,4 @@
-import { GridUtils } from '../../utils/GridUtils';
+import { GridUtils } from '../../utils';
 
 describe('GridUtils', () => {
     describe('initializeGrid', () => {

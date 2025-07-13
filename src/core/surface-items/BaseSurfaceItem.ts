@@ -1,4 +1,4 @@
-import { ItemState } from './ItemState';
+import { ItemStatus } from './ItemStatus';
 import { SurfaceItem } from './SurfaceItem';
 import { Location } from './Location';
 import { Direction } from './Direction';
@@ -30,5 +30,5 @@ export abstract class BaseSurfaceItem implements SurfaceItem {
         this._direction = newDirection;
     }
 
-    abstract report(): ItemState;
+    abstract report(): ItemStatus;
 }

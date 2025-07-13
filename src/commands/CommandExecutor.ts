@@ -1,5 +1,13 @@
-import { Rotation, SurfaceItemFactory, SurfaceItemType, SurfaceItemUtil } from '../core/surface-items';
+import {
+    ItemStatus,
+    Rotation,
+    SurfaceItem,
+    SurfaceItemFactory,
+    SurfaceItemType,
+    SurfaceItemUtil,
+} from '../core/surface-items';
 import { Surface } from '../core/surfaces';
+import { ErrorHandler } from '../utils';
 import { Command } from './Command';
 import {
     CommandExecutionErrors,
@@ -8,6 +16,8 @@ import {
     ReportingExecutionError,
     RotationExecutionError,
 } from './CommandExecutionErrors';
+import { CommandExecutionResult } from './CommandExecutionResult';
+import { CommandParser } from './CommandParser';
 import { CommandType } from './CommandType';
 import { PlaceCommand } from './PlaceCommand';
 
@@ -18,27 +28,33 @@ export class CommandExecutor {
         private _surfaceItemFactory: SurfaceItemFactory
     ) {}
 
-    public execute(command: Command): void {
+    public execute(input: string): CommandExecutionResult {
+        let command;
+        try {
+            command = CommandParser.parse(input);
+            return this._execute(command);
+        } catch (error) {
+            return ErrorHandler.handleExecutionError(error as Error);
+        }
+    }
+
+    private _execute(command: Command): CommandExecutionResult {
         switch (command.type) {
             case CommandType.PLACE:
-                this.handlePlaceCommand(command as PlaceCommand);
-                break;
+                return this.handlePlaceCommand(command as PlaceCommand);
             case CommandType.MOVE:
-                this.handleMoveCommand();
-                break;
+                return this.handleMoveCommand();
             case CommandType.LEFT:
             case CommandType.RIGHT:
-                this.handleTurnCommand(command.type);
-                break;
+                return this.handleTurnCommand(command.type);
             case CommandType.REPORT:
-                this.handleReportCommand();
-                break;
+                return this.handleReportCommand();
             default:
                 throw new Error(`Unknown command type: ${command.type}`);
         }
     }
 
-    protected handlePlaceCommand(command: PlaceCommand) {
+    protected handlePlaceCommand(command: PlaceCommand): CommandExecutionResult {
         try {
             let surfaceItem = this._surface.getItem(CommandExecutor.ENTITY_ID);
             if (!surfaceItem) {
@@ -57,19 +73,21 @@ export class CommandExecutor {
                 throw new Error(CommandExecutionErrors.ITEM_CANNOT_BE_PLACED);
             }
             this._surface.placeItem(surfaceItem);
+            return this.createCommandExecutionResult(CommandType.PLACE, surfaceItem);
         } catch (error) {
             const errorMessage = `${CommandExecutionErrors.COMMAND_EXECUTION_FAILED} ${error}`;
             throw new PlacementExecutionError(errorMessage);
         }
     }
 
-    protected handleMoveCommand() {
+    protected handleMoveCommand(): CommandExecutionResult {
         try {
             const surfaceItem = this._surface.getItem(CommandExecutor.ENTITY_ID);
             if (SurfaceItemUtil.isMovable(surfaceItem)) {
                 if (this._surface.isValidPlacement(surfaceItem.nextMove())) {
                     surfaceItem.move();
                     this._surface.placeItem(surfaceItem);
+                    return this.createCommandExecutionResult(CommandType.MOVE, surfaceItem);
                 } else {
                     throw new Error(CommandExecutionErrors.MOVEMENT_OUT_OF_BOUNDS);
                 }
@@ -82,25 +100,38 @@ export class CommandExecutor {
         }
     }
 
-    protected handleTurnCommand(type: CommandType) {
+    protected handleTurnCommand(type: CommandType): CommandExecutionResult {
         try {
             const surfaceItem = this._surface.getItem(CommandExecutor.ENTITY_ID);
             if (!SurfaceItemUtil.isRotatable(surfaceItem)) {
                 throw new Error(CommandExecutionErrors.ITEM_CANNOT_BE_ROTATED);
             }
             surfaceItem.rotate(type === CommandType.LEFT ? Rotation.LEFT : Rotation.RIGHT);
+            return this.createCommandExecutionResult(type, surfaceItem);
         } catch (error) {
             const errorMessage = `${CommandExecutionErrors.COMMAND_EXECUTION_FAILED} ${error}`;
             throw new RotationExecutionError(errorMessage);
         }
     }
 
-    protected handleReportCommand() {
+    protected handleReportCommand(): CommandExecutionResult {
         try {
-            this._surface.getItem(CommandExecutor.ENTITY_ID)?.report();
+            const surfaceItem = this._surface.getItem(CommandExecutor.ENTITY_ID);
+            if (!surfaceItem) {
+                throw new Error(CommandExecutionErrors.ITEM_NOT_EXIST);
+            }
+            return this.createCommandExecutionResult(CommandType.REPORT, surfaceItem);
         } catch (error) {
             const errorMessage = `${CommandExecutionErrors.COMMAND_EXECUTION_FAILED} ${error}`;
             throw new ReportingExecutionError(errorMessage);
         }
+    }
+
+    private createCommandExecutionResult(commandType: CommandType, item: SurfaceItem): CommandExecutionResult {
+        return {
+            success: true,
+            command: commandType,
+            itemStatus: item.report(),
+        };
     }
 }

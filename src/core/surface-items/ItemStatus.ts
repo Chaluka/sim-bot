@@ -1,7 +1,7 @@
 import { Direction } from './Direction';
 import { Location } from './Location';
 
-export interface ItemState {
+export interface ItemStatus {
     id: string;
     location: Location;
     direction?: Direction;

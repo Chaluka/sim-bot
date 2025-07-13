@@ -2,7 +2,7 @@ import { BaseSurfaceItem } from './BaseSurfaceItem';
 import { Movable } from './Movable';
 import { Direction } from './Direction';
 import { Location } from './Location';
-import { ItemState } from './ItemState';
+import { ItemStatus } from './ItemStatus';
 import { Rotatable } from './Rotatable';
 import { Rotation } from './Rotation';
 import { SurfaceItemUtil } from './utils/SurfaceItemUtil';
@@ -25,7 +25,7 @@ export class Robot extends BaseSurfaceItem implements Movable, Rotatable {
         this._direction = SurfaceItemUtil.rotate(this._direction, rotation);
     }
 
-    public report(): ItemState {
+    public report(): ItemStatus {
         return {
             id: this._id,
             location: this._location,

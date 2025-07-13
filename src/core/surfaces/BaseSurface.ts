@@ -1,4 +1,4 @@
-import { GridUtils } from '../../utils/GridUtils';
+import { GridUtils } from '../../utils';
 import { SurfaceItem, Location } from '../surface-items';
 import { Dimensions } from './Dimensions';
 import { Surface } from './Surface';

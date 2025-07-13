@@ -5,6 +5,7 @@ export class CommandExecutionErrors {
     static readonly ITEM_CANNOT_BE_PLACED = 'The item cannot be placed at the specified location.';
     static readonly ITEM_CANNOT_BE_ROTATED = 'The item cannot be rotated.';
     static readonly MOVEMENT_OUT_OF_BOUNDS = 'The item cannot be moved off the surface.';
+    static readonly ITEM_NOT_EXIST = 'The item does not exist on the surface';
 }
 
 export class PlacementExecutionError extends Error {

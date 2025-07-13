@@ -7,6 +7,6 @@ export * from './Rotatable';
 export * from './BaseSurfaceItem';
 export * from './SurfaceItem';
 export * from './Location';
-export * from './ItemState';
+export * from './ItemStatus';
 export * from './SurfaceItemFactory';
 export * from './SurfaceItemFactoryImpl';
