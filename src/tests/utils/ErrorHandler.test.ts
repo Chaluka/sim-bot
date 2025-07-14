@@ -10,9 +10,9 @@ describe('ErrorHandler', () => {
             // Act
             const result = ErrorHandler.handleExecutionError(error);
             // Assert
-            expect(result.success).toBe(false);
-            expect(result.error).toBe(errorMessage);
-            expect(result.data.name).toBe(error.name);
+            expect(result.name).toBe(error.name);
+            expect(result.message).toBe(errorMessage);
+            expect(result.code).toBe(ErrorHandler.DEFAULT_ERROR_CODE);
         });
     });
 });

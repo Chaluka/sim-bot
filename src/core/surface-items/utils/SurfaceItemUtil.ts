@@ -18,7 +18,7 @@ export class SurfaceItemUtil {
     }
 
     public static isMovable(surfaceItem: SurfaceItem | null): surfaceItem is SurfaceItem & Movable {
-        return surfaceItem !== null && 'move' in surfaceItem && typeof surfaceItem.move === 'function';
+        return surfaceItem !== null && 'nextMove' in surfaceItem && typeof surfaceItem.nextMove === 'function';
     }
 
     public static isRotatable(surfaceItem: SurfaceItem | null): surfaceItem is SurfaceItem & Rotatable {

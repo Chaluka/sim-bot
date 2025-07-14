@@ -20,6 +20,6 @@ export default class TestUserInterface implements UserInterface {
 
     public format(result: CommandExecutionResult): string {
         const { itemStatus, ..._ } = result;
-        return `${itemStatus?.location.x},${itemStatus?.location.y},${itemStatus?.direction}`;
+        return `${itemStatus?.location?.x},${itemStatus?.location?.y},${itemStatus?.direction}`;
     }
 }

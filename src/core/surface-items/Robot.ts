@@ -6,19 +6,16 @@ import { ItemStatus } from './ItemStatus';
 import { Rotatable } from './Rotatable';
 import { Rotation } from './Rotation';
 import { SurfaceItemUtil } from './utils/SurfaceItemUtil';
+import { Surface } from '../surfaces';
 
 export class Robot extends BaseSurfaceItem implements Movable, Rotatable {
     constructor(
         id: string,
-        location: Location,
         direction: Direction,
+        surface?: Surface,
         private _step: number = 1
     ) {
-        super(id, location, direction);
-    }
-
-    public move(): void {
-        this._location = this.nextMove();
+        super(id, direction, surface);
     }
 
     public rotate(rotation: Rotation): void {
@@ -28,14 +25,17 @@ export class Robot extends BaseSurfaceItem implements Movable, Rotatable {
     public report(): ItemStatus {
         return {
             id: this._id,
-            location: this._location,
+            location: this.location,
             direction: this._direction,
         };
     }
 
-    public nextMove(): Location {
-        const { x, y } = this._location;
+    public nextMove(): Location | null {
+        if (!this.location) {
+            return null;
+        }
 
+        const { x, y } = this.location!;
         switch (this._direction) {
             case Direction.NORTH:
                 return { x, y: y + this._step };

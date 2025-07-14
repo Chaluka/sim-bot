@@ -1,11 +1,18 @@
-import { CommandExecutionResult } from '../commands';
+import { ErrorResult } from './ErrorResult';
 
 export class ErrorHandler {
-    public static handleExecutionError(error: Error): CommandExecutionResult {
+    public static readonly DEFAULT_ERROR_CODE = '404';
+    public static handleExecutionError(error: Error): ErrorResult {
+        const code = this.getErrorCode(error);
         return {
-            success: false,
-            error: error.message,
-            data: { name: error.name, code: '404', stackTrace: JSON.stringify(error.message) },
+            name: error.name,
+            code,
+            message: error.message,
+            error: JSON.stringify(error.stack),
         };
+    }
+
+    private static getErrorCode(error: Error) {
+        return ErrorHandler.DEFAULT_ERROR_CODE;
     }
 }

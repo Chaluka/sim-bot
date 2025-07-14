@@ -1,6 +1,6 @@
 import { Direction } from './Direction';
 import { SurfaceItem } from './SurfaceItem';
-import { Location } from './Location';
+import { Surface } from '../surfaces';
 
 export enum SurfaceItemType {
     ROBOT = 'ROBOT',
@@ -8,5 +8,5 @@ export enum SurfaceItemType {
 }
 
 export interface SurfaceItemFactory {
-    create(type: SurfaceItemType, id: string, location: Location, direction: Direction, step?: number): SurfaceItem;
+    create(type: SurfaceItemType, id: string, direction: Direction, surface?: Surface, step?: number): SurfaceItem;
 }

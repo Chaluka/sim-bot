@@ -4,7 +4,7 @@ import { Direction } from './Direction';
 
 export interface SurfaceItem {
     id: string;
-    location: Location;
+    location: Location | null;
     direction: Direction;
     report(): ItemStatus;
 }

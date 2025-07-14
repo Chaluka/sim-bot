@@ -3,6 +3,6 @@ import { Location } from './Location';
 
 export interface ItemStatus {
     id: string;
-    location: Location;
+    location: Location | null;
     direction?: Direction;
 }

@@ -1,70 +1,70 @@
-import { Direction, Movable, Rotatable, SurfaceItem, Location } from '../../../core/surface-items';
-import { BaseSurface, Dimensions, SurfaceError, SurfaceErrors } from '../../../core/surfaces';
+import { Direction, SurfaceItem, Location } from '../../../core/surface-items';
+import { SurfaceError, SurfaceErrors } from '../../../core/surfaces';
 import { SurfaceItemTestHelper } from '../../helpers/SurfaceItemTestHelper';
-
-class BaseSurfaceTest extends BaseSurface {
-    public isItemPlaced(item: SurfaceItem): boolean {
-        return this.getItem(item.id) !== null && this.getLocationMarker(item.location) === item.id;
-    }
-}
+import { SurfaceTestHelper, TestSurface } from '../../helpers/SurfaceTestHelper';
 
 describe('BaseSurface', () => {
-    let surface: BaseSurfaceTest;
-    let mockSurfaceItem: SurfaceItem & Movable & Rotatable;
+    let surface: TestSurface;
+    let surfaceItem: SurfaceItem;
 
     beforeEach(() => {
-        surface = new BaseSurfaceTest(new Dimensions(5, 10));
-        mockSurfaceItem = SurfaceItemTestHelper.createMockMovableRotatableSurfaceItem('item1', 0, 0, Direction.NORTH);
+        surface = SurfaceTestHelper.createTestSurface(5, 10);
+        surfaceItem = SurfaceItemTestHelper.createMockSurfaceItem('item1', Direction.SOUTH, surface);
     });
 
     describe('placeItem', () => {
         it('should plcae an item on the surface', () => {
-            // Assign & act
-            surface.placeItem(mockSurfaceItem);
-            expect(surface.getItem(mockSurfaceItem.id)).toBe(mockSurfaceItem);
+            // Assign
+            const location = { x: 1, y: 4 };
+            //
+            surface.placeItem(surfaceItem, location);
+            expect(surface.getItem(surfaceItem.id)).toBe(surfaceItem);
             // Assert
             // Check if the location is marked as occupied
-            expect(surface.isItemPlaced(mockSurfaceItem)).toBe(true);
+            expect(surface.hasItemPlaced(surfaceItem, location)).toBe(true);
         });
 
         it('should replace an existing item at the same location', () => {
             // Arrange
-            const existingItem = SurfaceItemTestHelper.createMockSurfaceItem('item2', 0, 0, Direction.SOUTH);
-            surface.placeItem(existingItem);
+            const location = { x: 0, y: 3 };
+            surface.placeItem(surfaceItem, location);
+
             // Act
-            const newItem = { ...existingItem, direction: Direction.EAST };
-            surface.placeItem(newItem);
+            const newItem = SurfaceItemTestHelper.createMockSurfaceItem('item1', Direction.SOUTH, surface);
+            surface.placeItem(newItem, location);
             // Assert
-            expect(surface.isItemPlaced(newItem)).toBe(true);
+            expect(surface.hasItemPlaced(newItem, location)).toBe(true);
         });
 
         it('should throw an error if placement is out of bounds', () => {
             // Arrange
-            mockSurfaceItem.location = { x: 6, y: 10 }; // Out of bounds
+            const location = { x: 6, y: 10 }; // Out of bounds
             // Act & Assert
             const error = new SurfaceError(SurfaceErrors.INVALID_PLACEMENT_OUT_OF_BOUNDS);
-            expect(() => surface.placeItem(mockSurfaceItem)).toThrow(error);
+            expect(() => surface.placeItem(surfaceItem, location)).toThrow(error);
         });
 
         it('should throw an error if placement is invalid', () => {
             // Arrange
-            surface.placeItem(mockSurfaceItem);
-            const newItem = SurfaceItemTestHelper.createMockSurfaceItem('item2', 0, 0, Direction.SOUTH);
+            const location = { x: 1, y: 3 };
+            surface.placeItem(surfaceItem, location);
+            const newItem = SurfaceItemTestHelper.createMockSurfaceItem('item2', Direction.SOUTH, surface);
             // Act & Assert
             const error = new SurfaceError(SurfaceErrors.INVALID_PLACEMENT_ALREADY_OCCUPIED);
-            expect(() => surface.placeItem(newItem)).toThrow(error);
+            expect(() => surface.placeItem(newItem, location)).toThrow(error);
         });
     });
 
     describe('removeItem', () => {
         it('should remove an item from the surface', () => {
             // Arrange
-            surface.placeItem(mockSurfaceItem);
+            const location = { x: 1, y: 3 };
+            surface.placeItem(surfaceItem, location);
             // Act
-            surface.removeItem(mockSurfaceItem.id);
+            surface.removeItem(surfaceItem.id);
             // Assert
-            expect(surface.getItem(mockSurfaceItem.id)).toBeNull();
-            expect(surface.isItemPlaced(mockSurfaceItem)).toBe(false);
+            expect(surface.getItem(surfaceItem.id)).toBeNull();
+            expect(surface.hasItemPlaced(surfaceItem, location)).toBe(false);
         });
 
         it('should throw an error if the item does not exist', () => {
@@ -77,11 +77,12 @@ describe('BaseSurface', () => {
     describe('getItem', () => {
         it('should return the item if it exists', () => {
             // Arrange
-            surface.placeItem(mockSurfaceItem);
+            const location = { x: 1, y: 3 };
+            surface.placeItem(surfaceItem, location);
             // Act
-            const item = surface.getItem(mockSurfaceItem.id);
+            const item = surface.getItem(surfaceItem.id);
             // Assert
-            expect(item).toEqual(mockSurfaceItem);
+            expect(item).toEqual(surfaceItem);
         });
 
         it('should return null if the item does not exist', () => {
@@ -114,7 +115,7 @@ describe('BaseSurface', () => {
         it('should return false for an occupied placement', () => {
             // Arrange
             const location: Location = { x: 0, y: 0 };
-            surface.placeItem(mockSurfaceItem);
+            surface.placeItem(surfaceItem, location);
             // Act
             const isValid = surface.isValidPlacement(location);
             // Assert

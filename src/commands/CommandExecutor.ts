@@ -1,6 +1,7 @@
 import { Rotation, SurfaceItem, SurfaceItemFactory, SurfaceItemType, SurfaceItemUtil } from '../core/surface-items';
 import { Surface } from '../core/surfaces';
 import { ErrorHandler } from '../utils';
+import { ErrorResult } from '../utils/ErrorResult';
 import { Command } from './Command';
 import {
     CommandExecutionErrors,
@@ -27,7 +28,7 @@ export class CommandExecutor {
             command = CommandParser.parse(input);
             return this._execute(command);
         } catch (error) {
-            return ErrorHandler.handleExecutionError(error as Error);
+            return this.createCommandExecutionErrorResult(error as Error, command?.type);
         }
     }
 
@@ -54,15 +55,13 @@ export class CommandExecutor {
                 surfaceItem = this._surfaceItemFactory.create(
                     SurfaceItemType.ROBOT,
                     CommandExecutor.ENTITY_ID,
-                    command.location,
-                    command.direction
+                    command.direction,
+                    this._surface
                 );
-            }
-            surfaceItem.location = command.location;
-            if (SurfaceItemUtil.isMovableOrRotatable(surfaceItem)) {
+            } else if (SurfaceItemUtil.isMovableOrRotatable(surfaceItem)) {
                 surfaceItem.direction = command.direction;
             }
-            this._surface.placeItem(surfaceItem);
+            this._surface.placeItem(surfaceItem, command.location);
             return this.createCommandExecutionResult(CommandType.PLACE, surfaceItem);
         } catch (error) {
             const errorMessage = `${CommandExecutionErrors.COMMAND_EXECUTION_FAILED} ${error}`;
@@ -74,13 +73,8 @@ export class CommandExecutor {
         try {
             const surfaceItem = this._surface.getItem(CommandExecutor.ENTITY_ID);
             if (SurfaceItemUtil.isMovable(surfaceItem)) {
-                if (this._surface.isValidPlacement(surfaceItem.nextMove())) {
-                    surfaceItem.move();
-                    this._surface.placeItem(surfaceItem);
-                    return this.createCommandExecutionResult(CommandType.MOVE, surfaceItem);
-                } else {
-                    throw new Error(CommandExecutionErrors.MOVEMENT_OUT_OF_BOUNDS);
-                }
+                this._surface.placeItem(surfaceItem, surfaceItem.nextMove()!);
+                return this.createCommandExecutionResult(CommandType.MOVE, surfaceItem);
             } else {
                 throw new Error(CommandExecutionErrors.ITEM_CANNOT_BE_MOVED);
             }
@@ -122,6 +116,15 @@ export class CommandExecutor {
             success: true,
             command: commandType,
             itemStatus: item.report(),
+        };
+    }
+
+    private createCommandExecutionErrorResult(error: Error, commandType?: CommandType): CommandExecutionResult {
+        const errorResult = ErrorHandler.handleExecutionError(error);
+        return {
+            success: false,
+            command: commandType,
+            error: errorResult,
         };
     }
 }
