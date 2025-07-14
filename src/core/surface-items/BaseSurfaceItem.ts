@@ -27,5 +27,8 @@ export abstract class BaseSurfaceItem implements SurfaceItem {
         this._direction = newDirection;
     }
 
+    /**
+     * Returns the current loaction and direction of the item.
+     */
     abstract report(): ItemStatus;
 }

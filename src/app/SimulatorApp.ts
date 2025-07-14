@@ -11,6 +11,11 @@ export class SimulatorApp {
         this._session = null;
     }
 
+    /**
+     * Returns the instance of sim app for the given configerations.
+     * @param configs Configurations to setup the app
+     * @returns 
+     */
     public static getInstance(configs: AppConfigs): SimulatorApp {
         if (!SimulatorApp._instance) {
             SimulatorApp._instance = new SimulatorApp(configs);
@@ -18,6 +23,9 @@ export class SimulatorApp {
         return SimulatorApp._instance;
     }
 
+    /**
+     * Run the simulator app
+     */
     public run(): void {
         this._session = new SessionImpl(this._configs.sessionConfigs);
         this._session.run();
