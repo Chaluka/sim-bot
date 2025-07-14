@@ -1,8 +1,10 @@
 import { CommandExecutor } from '../../commands';
+import { Dimensions, SurfaceType } from '../../core/surfaces';
 import { UserInterface } from '../io';
 import { Session } from './Session';
 import { SessionStatus } from './SessionStatus';
 import { SessionConfigs } from './SesstionConfigs';
+import { v4 as uuidv4 } from 'uuid';
 
 export class SessionImpl implements Session {
     private _status = SessionStatus.INACTIVE;
@@ -10,20 +12,17 @@ export class SessionImpl implements Session {
     private _sessionId: string;
     private _userInterface: UserInterface;
 
-    constructor(configs: SessionConfigs) {
-        this._executor = new CommandExecutor(configs.surface, configs.surfaceItemFactory, configs.commandParser);
-        this._sessionId = this.generateSessionId();
-        this._userInterface = configs.userInterface;
-    }
-
-    private generateSessionId(): string {
-        return 'session-' + Math.random().toString(36).substring(2, 15);
+    constructor(private _configs: SessionConfigs) {
+        this._sessionId = uuidv4();
+        this._userInterface = _configs.userInterface;
+        this._executor = null;
     }
 
     public run(): void {
-        if (!this._userInterface || !this._executor) {
+        if (!this._userInterface) {
             throw Error('Session Error');
         }
+        this.initializeCommandExecutor();
         this._status = SessionStatus.ACTIVE;
         this._userInterface.showMenu();
         this._userInterface.prompt((input) => {
@@ -38,5 +37,10 @@ export class SessionImpl implements Session {
 
     public get status(): SessionStatus {
         return this._status;
+    }
+
+    private initializeCommandExecutor() {
+        const surface = this._configs.surfaceFactory.create(SurfaceType.TABLE_TOP, new Dimensions(5, 5));
+        this._executor = new CommandExecutor(surface, this._configs.surfaceItemFactory, this._configs.commandParser);
     }
 }

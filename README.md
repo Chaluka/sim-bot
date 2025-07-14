@@ -61,3 +61,20 @@ MOVE
 REPORT
 Output: 3,3,NORTH
 ```
+
+#How to Build and Run
+
+## Install dependencies
+```
+npm install
+```
+
+## Compile TypeScript to JavaScript
+```
+npm run build
+```
+
+# Run the compiled app
+```
+npm run start
+```

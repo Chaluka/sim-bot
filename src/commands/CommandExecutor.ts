@@ -21,7 +21,6 @@ export class CommandExecutor {
         private _surfaceItemFactory: SurfaceItemFactory,
         private _commandParser: CommandParser
     ) {}
-
     /**
      * Executes a user command on the surface.
      *

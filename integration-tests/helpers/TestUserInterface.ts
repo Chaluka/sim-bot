@@ -4,35 +4,35 @@ import { CommandTestArgs } from './CommandTestArgs';
 
 export default class TestUserInterface implements UserInterface {
     constructor(private _test: CommandTestArgs) {}
+
     display(output: CommandExecutionResult): void {}
+
     showMenu(): void {}
+
     prompt(callback: (input: string) => CommandExecutionResult): void {
         const { commands, output } = this._test;
-        let finalSuccesResult: CommandExecutionResult = {
-            success: false,
-            command: undefined,
-            itemStatus: undefined,
-        };
+        let finalSuccesResult: CommandExecutionResult | null = null;
 
         for (let command of commands) {
             const result = callback(command);
-            expect(result.success).toBeTruthy();
-            expect(result.command).toBeDefined();
-
             if (result.success) {
                 finalSuccesResult = { ...result };
             }
         }
 
-        if (finalSuccesResult) {
+        const cleansedOutput = output.trim();
+        if (cleansedOutput) {
             const actualOutput = this.format(finalSuccesResult);
-            expect(actualOutput).toBe(output);
+            expect(actualOutput).toBe(cleansedOutput);
         } else {
-            throw new Error('No command was executed, result is undefined.');
+            expect(finalSuccesResult).toBeNull();
         }
     }
 
-    public format(result: CommandExecutionResult): string {
+    private format(result: CommandExecutionResult | null): string | null {
+        if (!result) {
+            return null;
+        }
         const { itemStatus, ..._ } = result;
         return `${itemStatus?.location?.x},${itemStatus?.location?.y},${itemStatus?.direction}`;
     }

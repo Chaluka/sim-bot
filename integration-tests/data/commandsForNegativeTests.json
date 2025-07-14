@@ -1,51 +1,60 @@
 [
     {
-        "testId": "test-001",
+        "testId": "neg-test-001",
         "commands": ["PLAC 0,0,NORTH", "MOVE", "REPORT"],
         "output": ""
     },
     {
-        "testId": "test-002",
-        "commands": ["", "mc", "PLACE 1,2,EAST", "MOVE", "MOVE", "LEFT", "MOVE", "REPORT"],
-        "output": "3,3,NORTH"
+        "testId": "neg-test-002",
+        "commands": [
+            "PLACE 10,20,EAST",
+            "PLACE 11,12,EAST",
+            "MOVE",
+            "MOVE",
+            "PLACE 0,6,EAST",
+            "PLACE 6,0,EAST",
+            "MOVE",
+            "REPORT"
+        ],
+        "output": ""
     },
     {
-        "testId": "test-003",
+        "testId": "neg-test-003",
         "commands": ["PLACE 4,4,WEST", "MOVE", "ff", "PLACE1,2,NORTH", "MOVE", "REPORT", "REP"],
         "output": "2,4,WEST"
     },
     {
-        "testId": "test-004",
+        "testId": "neg-test-004",
         "commands": ["PLACE 2,2,SOUTH", "MOVE", "NO", "NO", "RIGHT", "MOVE", "REPORT"],
         "output": "1,0,WEST"
     },
     {
-        "testId": "test-005",
+        "testId": "neg-test-005",
         "commands": ["PLACE 0,0,SOUTH", "MOV", "REPORT"],
         "output": "0,0,SOUTH"
     },
     {
-        "testId": "test-006",
+        "testId": "neg-test-006",
         "commands": ["PLACE 3,3,NORTH", "right", "RIGHT", "move", "MOVE", "RIGHT", "MOVE", "REPORT"],
         "output": "4,2,SOUTH"
     },
     {
-        "testId": "test-007",
+        "testId": "neg-test-007",
         "commands": ["SS", "FF", "PLACE 1,1,EAST", "LEFT", "LeFt", "MOVE", "MOVE", "REPORT"],
         "output": "1,3,NORTH"
     },
     {
-        "testId": "test-008",
+        "testId": "neg-test-008",
         "commands": ["PLACE 0,4,NORTH", "SS", "FF", "", "EE"],
         "output": "0,4,WEST"
     },
     {
-        "testId": "test-009",
+        "testId": "neg-test-009",
         "commands": ["PLACE 2,2,NORTH", "LEFT", "MOVE", "LEFT", "MOVE", "REPORT"],
         "output": "1,1,SOUTH"
     },
     {
-        "testId": "test-010",
+        "testId": "neg-test-010",
         "commands": ["PLACED 0,0,EAST", "MOVED", "MOVED", "RIGHT", "MOVE", "LEFT", "MOVE", "REPORT"],
         "output": ""
     }

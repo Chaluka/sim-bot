@@ -1,77 +1,77 @@
 [
     {
-        "testId": "test-001",
+        "testId": "pos-test-001",
         "commands": ["PLACE 0,0,NORTH", "MOVE", "REPORT"],
         "output": "0,1,NORTH"
     },
     {
-        "testId": "test-002",
+        "testId": "pos-test-002",
         "commands": ["PLACE 1,2,EAST", "MOVE", "MOVE", "LEFT", "MOVE", "REPORT"],
         "output": "3,3,NORTH"
     },
     {
-        "testId": "test-003",
+        "testId": "pos-test-003",
         "commands": ["PLACE 4,4,WEST", "MOVE", "MOVE", "REPORT"],
         "output": "2,4,WEST"
     },
     {
-        "testId": "test-004",
+        "testId": "pos-test-004",
         "commands": ["PLACE 2,2,SOUTH", "MOVE", "MOVE", "RIGHT", "MOVE", "REPORT"],
         "output": "1,0,WEST"
     },
     {
-        "testId": "test-005",
+        "testId": "pos-test-005",
         "commands": ["PLACE 0,0,SOUTH", "MOVE", "REPORT"],
         "output": "0,0,SOUTH"
     },
     {
-        "testId": "test-006",
+        "testId": "pos-test-006",
         "commands": ["PLACE 3,3,NORTH", "RIGHT", "MOVE", "RIGHT", "MOVE", "REPORT"],
         "output": "4,2,SOUTH"
     },
     {
-        "testId": "test-007",
+        "testId": "pos-test-007",
         "commands": ["PLACE 1,1,EAST", "LEFT", "MOVE", "MOVE", "REPORT"],
         "output": "1,3,NORTH"
     },
     {
-        "testId": "test-008",
+        "testId": "pos-test-008",
         "commands": ["PLACE 0,4,NORTH", "MOVE", "LEFT", "MOVE", "REPORT"],
         "output": "0,4,WEST"
     },
     {
-        "testId": "test-009",
+        "testId": "pos-test-009",
         "commands": ["PLACE 2,2,NORTH", "LEFT", "MOVE", "LEFT", "MOVE", "REPORT"],
         "output": "1,1,SOUTH"
     },
     {
-        "testId": "test-010",
+        "testId": "pos-test-010",
         "commands": ["PLACE 0,0,EAST", "MOVE", "MOVE", "RIGHT", "MOVE", "LEFT", "MOVE", "REPORT"],
-        "output": "2,2,EAST"
+        "output": "3,0,EAST"
     },
     {
-        "testId": "test-011",
+        "testId": "pos-test-011",
         "commands": ["PLACE 0,0,NORTH", "LEFT", "MOVE", "MOVE", "PLACE 0,0,NORTH", "REPORT"],
         "output": "0,0,NORTH"
     },
     {
-        "testId": "test-012",
+        "testId": "pos-test-012",
         "commands": ["PLACE 0,0,NORTH", "PLACE 0,1,NORTH", "PLACE 0,0,EAST", "REPORT"],
         "output": "0,0,EAST"
     },
     {
-        "testId": "test-013",
+        "testId": "pos-test-013",
         "commands": ["LEFT", "MOVE", "MOVE", "PLACE 0,0,NORTH", "PLACE 0,0,EAST", "REPORT"],
         "output": "0,0,EAST"
     },
     {
-        "testId": "test-014",
+        "testId": "pos-test-014",
         "commands": ["REPORT"],
         "output": ""
     },
     {
-        "testId": "test-015",
+        "testId": "pos-test-015",
         "commands": ["PLACE 0,0,NORTH", "LEFT", "LEFT", "LEFT", "LEFT", "REPORT"],
-        "output": " 0,0,NORTH"
+        "output": "0,0,NORTH"
     }
 ]

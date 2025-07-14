@@ -19,13 +19,7 @@ export class SimulatorApp {
     }
 
     public run(): void {
-        const surface = new SurfaceFactoryImpl().create(this._configs.surfaceType, this._configs.dimensions);
-        this._session = new SessionImpl({
-            surface,
-            surfaceItemFactory: new SurfaceItemFactoryImpl(),
-            userInterface: this._configs.userInterface,
-            commandParser: new CLCommandParser(),
-        });
+        this._session = new SessionImpl(this._configs.sessionConfigs);
         this._session.run();
     }
 }
