@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy package files and install deps
 COPY package*.json ./
 COPY tsconfig.json ./
-COPY .npmrc .npmrc 
+
 RUN npm ci
 
 # Copy source files and build

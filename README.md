@@ -78,3 +78,25 @@ npm run build
 ```
 npm run start
 ```
+
+# Run as Developer
+
+```
+npm run dev
+```
+To enable verbose output (showing a report for each valid command), initialize the CLUserInterface as follows (index.ts - line 14).
+
+```
+new CLUserInterface(true);
+```
+
+```plain
+PLACE 0,0,NORTH
+Output: 0,0,NORTH
+MOVE
+Output: 0,1,NORTH
+LEFT
+Output: 0,1,WEST
+REPORT
+Output: 0,1,WEST
+```
