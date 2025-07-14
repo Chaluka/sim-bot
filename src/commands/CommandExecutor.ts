@@ -1,7 +1,6 @@
 import { Rotation, SurfaceItem, SurfaceItemFactory, SurfaceItemType, SurfaceItemUtil } from '../core/surface-items';
 import { Surface } from '../core/surfaces';
-import { ErrorHandler } from '../utils';
-import { ErrorResult } from '../utils/ErrorResult';
+import { ErrorHandler, Logger } from '../utils';
 import { Command } from './Command';
 import {
     CommandExecutionErrors,
@@ -19,15 +18,26 @@ export class CommandExecutor {
     private static readonly ENTITY_ID = 'robot_1'; // Example entity ID, can be customized
     constructor(
         private _surface: Surface,
-        private _surfaceItemFactory: SurfaceItemFactory
+        private _surfaceItemFactory: SurfaceItemFactory,
+        private _commandParser: CommandParser
     ) {}
 
+    /**
+     * Executes a user command on the surface.
+     *
+     * @param input - A raw command string provided by the user (e.g., "PLACE 0,0,NORTH", "MOVE").
+     * @returns A {@link CommandExecutionResult} summarizing the outcome of the command execution,
+     * including success status and error (if any).
+     *
+     * @throws This method does not throw; all errors are captured and returned as part of the result.
+     */
     public execute(input: string): CommandExecutionResult {
         let command;
         try {
-            command = CommandParser.parse(input);
+            command = this._commandParser.parse(input);
             return this._execute(command);
         } catch (error) {
+            Logger.error((error as Error).message);
             return this.createCommandExecutionErrorResult(error as Error, command?.type);
         }
     }

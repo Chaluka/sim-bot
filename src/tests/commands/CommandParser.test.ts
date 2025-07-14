@@ -1,14 +1,15 @@
-import { CommandParser, CommandType, PlaceCommand, CommandParserError } from '../../commands';
+import { CommandType, PlaceCommand, CommandParserError, CLCommandParser } from '../../commands';
 import { Direction } from '../../core/surface-items';
 
-describe('CommandParser', () => {
+describe('commandParser', () => {
+    const commandParser = new CLCommandParser();
     describe('parse', () => {
         describe('postive tests', () => {
             it('should parase PLACE command correctly', () => {
                 // Arrange
                 const input = 'PLACE 1,2,NORTH';
                 // Act
-                const actualCommand = CommandParser.parse(input) as PlaceCommand;
+                const actualCommand = commandParser.parse(input) as PlaceCommand;
                 // Assert
                 expect(actualCommand.type).toBe(CommandType.PLACE);
                 expect(actualCommand.location.x).toBe(1);
@@ -20,7 +21,7 @@ describe('CommandParser', () => {
                 // Arrange
                 const input = 'MOVE';
                 // Act
-                const actualCommand = CommandParser.parse(input);
+                const actualCommand = commandParser.parse(input);
                 // Assert
                 expect(actualCommand.type).toBe(CommandType.MOVE);
             });
@@ -29,7 +30,7 @@ describe('CommandParser', () => {
                 // Arrange
                 const input = 'LEFT';
                 // Act
-                const actualCommand = CommandParser.parse(input);
+                const actualCommand = commandParser.parse(input);
                 // Assert
                 expect(actualCommand.type).toBe(CommandType.LEFT);
             });
@@ -38,7 +39,7 @@ describe('CommandParser', () => {
                 // Arrange
                 const input = 'RIGHT';
                 // Act
-                const actualCommand = CommandParser.parse(input);
+                const actualCommand = commandParser.parse(input);
                 // Assert
                 expect(actualCommand.type).toBe(CommandType.RIGHT);
             });
@@ -47,7 +48,7 @@ describe('CommandParser', () => {
                 // Arrange
                 const input = 'REPORT';
                 // Act
-                const actualCommand = CommandParser.parse(input);
+                const actualCommand = commandParser.parse(input);
                 // Assert
                 expect(actualCommand.type).toBe(CommandType.REPORT);
             });
@@ -56,20 +57,20 @@ describe('CommandParser', () => {
                 // Arrange
                 const input = ' RIGHT   ';
                 // Act
-                const actualCommand = CommandParser.parse(input);
+                const actualCommand = commandParser.parse(input);
                 // Assert
                 expect(actualCommand.type).toBe(CommandType.RIGHT);
             });
         });
 
         describe('negative', () => {
-            const error = new CommandParserError(CommandParser.FORMAT_ERROR_MESSAGE);
+            const error = new CommandParserError(commandParser.FORMAT_ERROR_MESSAGE);
             it('should throw error when PLACE command missing direction', () => {
                 // Arrange
                 const input = 'PLACE 1,2';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
 
@@ -78,7 +79,7 @@ describe('CommandParser', () => {
                 const input = 'PLACE NORTH';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
 
@@ -87,7 +88,7 @@ describe('CommandParser', () => {
                 const input = 'PLACE 1,A,NORTH';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
 
@@ -96,7 +97,7 @@ describe('CommandParser', () => {
                 const input = 'PLACE';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
 
@@ -105,7 +106,7 @@ describe('CommandParser', () => {
                 const input = 'MOVE 1,1,NORTH';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
 
@@ -114,7 +115,7 @@ describe('CommandParser', () => {
                 const input = 'move';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
 
@@ -123,7 +124,7 @@ describe('CommandParser', () => {
                 const input = 'PLACE 1,5,north';
                 // Act & Assert
                 expect(() => {
-                    CommandParser.parse(input);
+                    commandParser.parse(input);
                 }).toThrow(error);
             });
         });

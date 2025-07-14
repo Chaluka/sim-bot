@@ -7,7 +7,7 @@ import { SurfaceType } from './core/surfaces/SurfaceFactory.js';
 const appConfigs: AppConfigs = {
     surfaceType: SurfaceType.TABLE_TOP,
     dimensions: new Dimensions(5, 5),
-    userInterface: new CLUserInterface(),
+    userInterface: new CLUserInterface(), // enable verbose to get update for every move
 };
 
 SimulatorApp.getInstance(appConfigs).run();

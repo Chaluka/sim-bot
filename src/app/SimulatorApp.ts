@@ -1,3 +1,4 @@
+import { CLCommandParser } from '../commands';
 import { SurfaceItemFactoryImpl } from '../core/surface-items';
 import { SurfaceFactoryImpl } from '../core/surfaces';
 import { AppConfigs } from './AppConfigs';
@@ -18,13 +19,12 @@ export class SimulatorApp {
     }
 
     public run(): void {
-        console.log('SimulatorApp is running :::');
-
         const surface = new SurfaceFactoryImpl().create(this._configs.surfaceType, this._configs.dimensions);
         this._session = new SessionImpl({
             surface,
             surfaceItemFactory: new SurfaceItemFactoryImpl(),
             userInterface: this._configs.userInterface,
+            commandParser: new CLCommandParser(),
         });
         this._session.run();
     }

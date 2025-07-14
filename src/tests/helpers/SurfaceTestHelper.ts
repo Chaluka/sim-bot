@@ -7,10 +7,10 @@ export class SurfaceTestHelper {
         return new TestSurface(new Dimensions(width, height));
     }
 
-    public static createMockSurface(): Surface {
+    public static createMockSurface(): jest.Mocked<Surface> {
         return {
             getItem: jest.fn(),
-            getItemLocation: jest.fn().mockReturnValue({ x: 0, y: 0 }),
+            getItemLocation: jest.fn(),
             placeItem: jest.fn(),
             removeItem: jest.fn(),
             isValidPlacement: jest.fn(),

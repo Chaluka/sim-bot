@@ -15,6 +15,7 @@ describe('Robot', () => {
 
     beforeEach(() => {
         surface = SurfaceTestHelper.createMockSurface() as jest.Mocked<Surface>;
+        surface.getItemLocation.mockReturnValue({ x: 0, y: 0 });
         surfaceItem = new Robot('1', Direction.NORTH, surface);
     });
 

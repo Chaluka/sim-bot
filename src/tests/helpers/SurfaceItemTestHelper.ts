@@ -1,8 +1,8 @@
-import { Direction, Movable, Rotatable, SurfaceItem } from '../../core/surface-items';
+import { Direction, Movable, Rotatable, SurfaceItem, SurfaceItemFactory } from '../../core/surface-items';
 import { Surface } from '../../core/surfaces';
 
 export class SurfaceItemTestHelper {
-    public static createMockSurfaceItem(id: string, direction: Direction, surface: Surface): SurfaceItem {
+    public static createMockSurfaceItem(id: string, direction: Direction, surface: Surface): jest.Mocked<SurfaceItem> {
         const mockItem = {
             id,
             location: { x: 0, y: 0 },
@@ -21,7 +21,7 @@ export class SurfaceItemTestHelper {
         id: string,
         direction: Direction,
         surface: Surface
-    ): SurfaceItem & Movable & Rotatable {
+    ): jest.Mocked<SurfaceItem & Movable & Rotatable> {
         return {
             ...this.createMockSurfaceItem(id, direction, surface),
             nextMove: jest.fn(),

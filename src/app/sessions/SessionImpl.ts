@@ -11,7 +11,7 @@ export class SessionImpl implements Session {
     private _userInterface: UserInterface;
 
     constructor(configs: SessionConfigs) {
-        this._executor = new CommandExecutor(configs.surface, configs.surfaceItemFactory);
+        this._executor = new CommandExecutor(configs.surface, configs.surfaceItemFactory, configs.commandParser);
         this._sessionId = this.generateSessionId();
         this._userInterface = configs.userInterface;
     }
@@ -25,7 +25,7 @@ export class SessionImpl implements Session {
             throw Error('Session Error');
         }
         this._status = SessionStatus.ACTIVE;
-        console.log('BaseSession is now running');
+        this._userInterface.showMenu();
         this._userInterface.prompt((input) => {
             return this._executor!.execute(input);
         });
@@ -36,7 +36,7 @@ export class SessionImpl implements Session {
         console.log('BaseSession has been stopped');
     }
 
-    public getStatus(): SessionStatus {
+    public get status(): SessionStatus {
         return this._status;
     }
 }
