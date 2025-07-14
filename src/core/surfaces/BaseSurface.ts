@@ -48,9 +48,7 @@ export abstract class BaseSurface implements Surface {
             throw new SurfaceError(SurfaceErrors.INVALID_PLACEMENT_ALREADY_OCCUPIED);
         }
 
-        // If the item was already placed, free its old location
-        const existingItem = this.getItem(item.id);
-        if (existingItem) {
+        if (this._surfaceItems.has(item.id)) {
             this.relocateSurfaceItem(item, location);
             return;
         }
@@ -74,7 +72,6 @@ export abstract class BaseSurface implements Surface {
         if (!this._surfaceItems.has(id)) {
             throw new SurfaceError(SurfaceErrors.ITEM_NOT_FOUND);
         }
-        const item = this._surfaceItems.get(id);
         const location = this.getItemLocation(id);
         this.markLocationFree(location!);
         this._surfaceItems.delete(id);

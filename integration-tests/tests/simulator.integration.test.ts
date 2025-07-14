@@ -1,14 +1,24 @@
 import { TestHelper } from '../helpers/TestHelper';
-import tests from '../data/commands.json';
+import positiveTests from '../data/commandsForPositiveTests.json';
+import negativeTest from '../data/commandsForNegativeTests.json';
 
 describe('simulator', () => {
     describe('positive', () => {
-        test.each(tests)(
+        test.each(positiveTests)(
             'Running tests for args %o',
             ({ testId, commands, output }: { testId: string; commands: string[]; output: string }) => {
-                // Act
+                // Act & Assert
                 TestHelper.runTestSimulator({ testId, commands, output });
-                // Assert
+            }
+        );
+    });
+
+    describe('negative', () => {
+        test.each(negativeTest)(
+            'Running tests for args %o',
+            ({ testId, commands, output }: { testId: string; commands: string[]; output: string }) => {
+                // Act & Assert
+                TestHelper.runTestSimulator({ testId, commands, output });
             }
         );
     });

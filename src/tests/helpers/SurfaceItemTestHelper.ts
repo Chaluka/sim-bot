@@ -1,4 +1,4 @@
-import { Direction, Movable, Rotatable, SurfaceItem, SurfaceItemFactory } from '../../core/surface-items';
+import { Direction, Movable, Rotatable, SurfaceItem } from '../../core/surface-items';
 import { Surface } from '../../core/surfaces';
 
 export class SurfaceItemTestHelper {
