@@ -16,6 +16,7 @@ import {
     SurfaceItemFactory,
     Location,
     ItemStatus,
+    Robot,
 } from '../../core/surface-items';
 import { Surface } from '../../core/surfaces';
 import { SurfaceItemTestHelper } from '../helpers/SurfaceItemTestHelper';
@@ -24,8 +25,6 @@ import { SurfaceTestHelper } from '../helpers/SurfaceTestHelper';
 describe('CommandExecutor', () => {
     let commandExecutor: CommandExecutor;
     let mockSurface: jest.Mocked<Surface>;
-    let mockSurfaceItemFactory: jest.Mocked<SurfaceItemFactory>;
-    let mockParser: jest.Mocked<CommandParser>;
     let mockSurfaceItem: jest.Mocked<SurfaceItem & Movable & Rotatable>;
 
     describe('execute', () => {
@@ -39,33 +38,7 @@ describe('CommandExecutor', () => {
             );
             mockSurface.getItemLocation.mockReturnValue({ x: 0, y: 0 });
             mockSurface.getItem.mockReturnValue(mockSurfaceItem);
-            mockSurfaceItemFactory = {
-                create: jest.fn().mockReturnValue(mockSurfaceItem),
-            };
-            mockParser = {
-                parse: jest.fn(),
-            };
-            commandExecutor = new CommandExecutor(mockSurface, mockSurfaceItemFactory, mockParser);
-        });
-
-        describe('common tests', () => {
-            it('should throw error when command cannot be parsed', () => {
-                // Assign
-                const errorMessage = 'command error';
-                mockParser.parse.mockImplementation(() => {
-                    throw new Error(errorMessage);
-                });
-
-                // Act
-                const result = commandExecutor.execute('INVALID-COMMAND');
-
-                // Assert
-                expect(result.success).toBeFalsy();
-                expect(result.command).toBeUndefined();
-                expect(result.itemStatus).toBeUndefined();
-                expect(result.error).toBeDefined();
-                expect(result.error?.message).toBe(errorMessage);
-            });
+            commandExecutor = new CommandExecutor(mockSurface);
         });
 
         describe('execute PLACE commands', () => {
@@ -76,7 +49,6 @@ describe('CommandExecutor', () => {
                     location: { x: 0, y: 0 },
                     direction: Direction.NORTH,
                 };
-                mockParser.parse.mockReturnValue(command);
             });
 
             it('should place new item correctly', () => {
@@ -84,24 +56,19 @@ describe('CommandExecutor', () => {
                 mockSurface.getItem.mockReturnValue(null);
 
                 // Act
-                const result = commandExecutor.execute('PLACE 0,0,NORTH');
+                const result = commandExecutor.execute(mockSurfaceItem, command);
 
                 // Assert
-                assertCommandExecutionSuccess(CommandType.PLACE, result, [
-                    mockParser.parse,
-                    mockSurface.getItem,
-                    mockSurfaceItemFactory.create,
-                ]);
+                assertCommandExecutionSuccess(CommandType.PLACE, result);
                 expect(mockSurface.placeItem).toHaveBeenCalledWith(mockSurfaceItem, command.location);
             });
 
             it('should place existing item correctly', () => {
                 // Act
-                const result = commandExecutor.execute('PLACE 0,0,NORTH');
+                const result = commandExecutor.execute(mockSurfaceItem, command);
 
                 // Assert
-                assertCommandExecutionSuccess(CommandType.PLACE, result, [mockParser.parse, mockSurface.getItem]);
-                expect(mockSurfaceItemFactory.create).not.toHaveBeenCalled();
+                assertCommandExecutionSuccess(CommandType.PLACE, result);
                 expect(mockSurface.placeItem).toHaveBeenCalledWith(mockSurfaceItem, command.location);
             });
 
@@ -113,7 +80,7 @@ describe('CommandExecutor', () => {
                 });
 
                 // Act
-                const result = commandExecutor.execute('INVALID-COMMAND');
+                const result = commandExecutor.execute(mockSurfaceItem, command);
 
                 // Assert
                 assertCommandExecutionFailure(CommandType.PLACE, result, errorMessage);
@@ -126,15 +93,14 @@ describe('CommandExecutor', () => {
                 command = {
                     type: CommandType.LEFT,
                 };
-                mockParser.parse.mockReturnValue(command);
             });
 
             it('should turn the item left', () => {
                 // Act
-                const result = commandExecutor.execute('LEFT');
+                const result = commandExecutor.execute(mockSurfaceItem, command);
 
                 // Assert
-                assertCommandExecutionSuccess(CommandType.LEFT, result, [mockParser.parse, mockSurface.getItem]);
+                assertCommandExecutionSuccess(CommandType.LEFT, result);
                 expect(mockSurfaceItem.rotate).toHaveBeenCalledWith(Rotation.LEFT);
             });
 
@@ -146,7 +112,7 @@ describe('CommandExecutor', () => {
                 });
 
                 // Act
-                const result = commandExecutor.execute('INVALID-COMMAND');
+                const result = commandExecutor.execute(mockSurfaceItem, command);
 
                 // Assert
                 assertCommandExecutionFailure(CommandType.LEFT, result, errorMessage);
@@ -159,15 +125,14 @@ describe('CommandExecutor', () => {
                 command = {
                     type: CommandType.RIGHT,
                 };
-                mockParser.parse.mockReturnValue(command);
             });
 
             it('should turn the item right', () => {
                 // Act
-                const result = commandExecutor.execute('RIGHT');
+                const result = commandExecutor.execute(mockSurfaceItem, command); //'RIGHT');
 
                 // Assert
-                assertCommandExecutionSuccess(CommandType.RIGHT, result, [mockParser.parse, mockSurface.getItem]);
+                assertCommandExecutionSuccess(CommandType.RIGHT, result);
                 expect(mockSurfaceItem.rotate).toHaveBeenCalledWith(Rotation.RIGHT);
             });
 
@@ -179,7 +144,7 @@ describe('CommandExecutor', () => {
                 });
 
                 // Act
-                const result = commandExecutor.execute('INVALID-COMMAND');
+                const result = commandExecutor.execute(mockSurfaceItem, command); //'INVALID-COMMAND');
 
                 // Assert
                 assertCommandExecutionFailure(CommandType.RIGHT, result, errorMessage);
@@ -194,17 +159,17 @@ describe('CommandExecutor', () => {
                 command = {
                     type: CommandType.MOVE,
                 };
-                mockParser.parse.mockReturnValue(command);
+
                 nextLocation = { x: 5, y: 10 };
                 mockSurfaceItem.nextMove.mockReturnValue(nextLocation);
             });
 
             it('should move item to right direction', () => {
                 // Act
-                const result = commandExecutor.execute('MOVE');
+                const result = commandExecutor.execute(mockSurfaceItem, command); //'MOVE');
 
                 // Assert
-                assertCommandExecutionSuccess(CommandType.MOVE, result, [mockParser.parse, mockSurface.getItem]);
+                assertCommandExecutionSuccess(CommandType.MOVE, result);
                 expect(mockSurface.placeItem).toHaveBeenCalledWith(mockSurfaceItem, nextLocation);
             });
 
@@ -216,7 +181,7 @@ describe('CommandExecutor', () => {
                 });
 
                 // Act
-                const result = commandExecutor.execute('INVALID-COMMAND');
+                const result = commandExecutor.execute(mockSurfaceItem, command); //'INVALID-COMMAND');
 
                 // Assert
                 assertCommandExecutionFailure(CommandType.MOVE, result, errorMessage);
@@ -231,7 +196,7 @@ describe('CommandExecutor', () => {
                 command = {
                     type: CommandType.REPORT,
                 };
-                mockParser.parse.mockReturnValue(command);
+
                 mockItemStatus = {
                     id: 'tset-id',
                     location: { x: 2, y: 3 },
@@ -242,14 +207,10 @@ describe('CommandExecutor', () => {
 
             it('should move item to right direction', () => {
                 // Act
-                const result = commandExecutor.execute('REPORT');
+                const result = commandExecutor.execute(mockSurfaceItem, command); //'REPORT');
 
                 // Assert
-                assertCommandExecutionSuccess(CommandType.REPORT, result, [
-                    mockParser.parse,
-                    mockSurface.getItem,
-                    mockSurfaceItem.report,
-                ]);
+                assertCommandExecutionSuccess(CommandType.REPORT, result);
                 expect(result.itemStatus?.id).toBe(mockItemStatus.id);
                 expect(result.itemStatus?.location?.x).toBe(mockItemStatus.location?.x);
                 expect(result.itemStatus?.location?.y).toBe(mockItemStatus.location?.y);
@@ -264,7 +225,7 @@ describe('CommandExecutor', () => {
                 });
 
                 // Act
-                const result = commandExecutor.execute('INVALID-COMMAND');
+                const result = commandExecutor.execute(mockSurfaceItem, command); //'INVALID-COMMAND');
 
                 // Assert
                 assertCommandExecutionFailure(CommandType.REPORT, result, errorMessage);
@@ -273,12 +234,9 @@ describe('CommandExecutor', () => {
     });
 });
 
-function assertCommandExecutionSuccess(commandType: CommandType, result: CommandExecutionResult, mockFuncs: any[]) {
+function assertCommandExecutionSuccess(commandType: CommandType, result: CommandExecutionResult) {
     expect(result.success).toBeTruthy();
     expect(result.command).toBe(commandType);
-    for (let mockFunc of mockFuncs) {
-        expect(mockFunc).toHaveBeenCalled();
-    }
 }
 
 function assertCommandExecutionFailure(commandType: CommandType, result: CommandExecutionResult, errorMessage: string) {

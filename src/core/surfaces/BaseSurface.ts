@@ -19,6 +19,9 @@ export abstract class BaseSurface implements Surface {
             BaseSurface.DEFAULT_MARKER
         );
     }
+    getDimensions(): Dimensions {
+        return this._dimensions;
+    }
 
     public get dimensions(): Dimensions {
         return this._dimensions;

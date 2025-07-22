@@ -14,6 +14,16 @@ export class CLCommandParser implements CommandParser {
             return this.parsePlaceCommand(placeCommandMatch);
         }
 
+        const blockCommandMatch = cleansedInput.match(this.buildBlockCommandRegex());
+        if (blockCommandMatch) {
+            return this.parseBlockCommand(blockCommandMatch);
+        }
+
+        const findCommandMatch = cleansedInput.match(this.buildFindCommandRegex());
+        if (findCommandMatch) {
+            return this.parseFindCommand(findCommandMatch);
+        }
+
         const commandMatch = cleansedInput.match(this.buildOtherCommandRegex());
         if (commandMatch) {
             return {
@@ -38,6 +48,32 @@ export class CLCommandParser implements CommandParser {
     private buildPlaceCommandRegex() {
         const directions = Object.values(Direction).join('|');
         return new RegExp(`^PLACE\\s+(\\d+),(\\d+),(${directions})$`); // RegExp('', 'i') case-insensitive
+    }
+
+    private buildBlockCommandRegex() {
+        return new RegExp(`^BLOCK\\s+(\\d+),(\\d+)$`); // RegExp('', 'i') case-insensitive
+    }
+
+    private parseBlockCommand(match: RegExpMatchArray) {
+        const x = parseInt(match[1], 10);
+        const y = parseInt(match[2], 10);
+        return {
+            type: CommandType.BLOCK,
+            location: { x, y },
+        };
+    }
+
+    private buildFindCommandRegex() {
+        return new RegExp(`^FIND\\s+(\\d+),(\\d+)$`); // RegExp('', 'i') case-insensitive
+    }
+
+    private parseFindCommand(match: RegExpMatchArray) {
+        const x = parseInt(match[1], 10);
+        const y = parseInt(match[2], 10);
+        return {
+            type: CommandType.FIND,
+            location: { x, y },
+        };
     }
 
     private buildOtherCommandRegex() {

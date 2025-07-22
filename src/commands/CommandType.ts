@@ -4,4 +4,6 @@ export enum CommandType {
     LEFT = 'LEFT',
     RIGHT = 'RIGHT',
     REPORT = 'REPORT',
+    BLOCK = 'BLOCK',
+    FIND = 'FIND',
 }

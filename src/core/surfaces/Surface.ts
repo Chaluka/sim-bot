@@ -1,15 +1,16 @@
 import { SurfaceItem, Location } from '../surface-items';
+import { Dimensions } from './Dimensions';
 
 export interface Surface {
     /**
      * Get the surface item by id.
-     * @param id 
+     * @param id
      */
     getItem(id: string): SurfaceItem | null;
 
     /**
      * Get the location of a surface item by it's id.
-     * @param id 
+     * @param id
      */
     getItemLocation(id: string): Location | null;
 
@@ -22,7 +23,7 @@ export interface Surface {
 
     /**
      * Remove an item from the surface
-     * @param id 
+     * @param id
      */
     removeItem(id: string): void;
 
@@ -31,4 +32,6 @@ export interface Surface {
      * @param location The (x, y) coordinates on the surface
      */
     isValidPlacement(location: Location): boolean;
+
+    getDimensions(): Dimensions;
 }

@@ -4,7 +4,7 @@ import { Surface } from '../surfaces';
 
 export enum SurfaceItemType {
     ROBOT = 'ROBOT',
-    OBSTACLE = 'OBSTACLE',
+    BLOCK = 'BLOCk',
 }
 
 export interface SurfaceItemFactory {
@@ -16,5 +16,5 @@ export interface SurfaceItemFactory {
      * @param surface Surface that user want to place this item
      * @param step Number of cells that the item moves for single move
      */
-    create(type: SurfaceItemType, id: string, direction: Direction, surface?: Surface, step?: number): SurfaceItem;
+    create(type: SurfaceItemType, id: string, surface?: Surface, direction?: Direction, step?: number): SurfaceItem;
 }

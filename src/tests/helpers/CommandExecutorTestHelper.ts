@@ -13,6 +13,6 @@ export class CommandExecutorTestHelper {
         const mockParser: CommandParser = {
             parse: jest.fn(),
         };
-        return new CommandExecutor(mockSurface, mockSurfaceItemFactory, mockParser);
+        return new CommandExecutor(mockSurface);
     }
 }

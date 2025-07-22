@@ -6,5 +6,6 @@ export interface CommandExecutionResult {
     success: boolean;
     command?: CommandType;
     itemStatus?: ItemStatus;
+    path?: string;
     error?: ErrorResult;
 }

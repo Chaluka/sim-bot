@@ -34,6 +34,10 @@ export class CLUserInterface implements UserInterface {
         if (output.success && (this._vorbose || output.command == CommandType.REPORT)) {
             console.log(this.format(output));
         }
+
+        if (output.command == CommandType.FIND) {
+            console.log(output.path);
+        }
     }
 
     private format(result: CommandExecutionResult): string {

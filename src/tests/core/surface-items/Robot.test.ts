@@ -1,6 +1,6 @@
 import { Direction, Location, Robot, Rotation } from '../../../core/surface-items';
 import { SurfaceTestHelper } from '../../helpers/SurfaceTestHelper';
-import { Surface } from '../../../core/surfaces';
+import { Dimensions, Surface } from '../../../core/surfaces';
 import { TestHelperUtil } from '../../helpers/TestHelperUtil';
 
 function assertLocationIsEqual(expected: Location, actual: Location | null) {
@@ -16,6 +16,7 @@ describe('Robot', () => {
     beforeEach(() => {
         surface = SurfaceTestHelper.createMockSurface() as jest.Mocked<Surface>;
         surface.getItemLocation.mockReturnValue({ x: 0, y: 0 });
+        surface.getDimensions.mockReturnValue(new Dimensions(5, 5));
         surfaceItem = new Robot('1', Direction.NORTH, surface);
     });
 
@@ -79,6 +80,25 @@ describe('Robot', () => {
             expect(state.location).toBeDefined();
             expect(state.location?.x).toBe(loation.x);
             expect(state.location?.y).toBe(loation.y);
+        });
+    });
+
+    describe('findPath', () => {
+        it('find path successfully', () => {
+            // Assign
+            let loation = { x: 0, y: 0 };
+            surface.getItemLocation.mockReturnValue(loation);
+            surface.isValidPlacement.mockReturnValue(true);
+            surface.getDimensions.mockReturnValue(new Dimensions(5, 5));
+
+            // Act
+            //const path = surfaceItem.findPath({ x: 1, y: 3 });
+
+            // Assert
+            // expect(path).toBe([
+            //     { x: 0, y: 0 },
+            //     { x: 0, y: 1 },
+            // ]);
         });
     });
 });

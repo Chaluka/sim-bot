@@ -14,6 +14,7 @@ export class SurfaceTestHelper {
             placeItem: jest.fn(),
             removeItem: jest.fn(),
             isValidPlacement: jest.fn(),
+            getDimensions: jest.fn(),
         };
     }
 }
