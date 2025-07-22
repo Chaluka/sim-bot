@@ -21,8 +21,6 @@ export class Robot extends BaseSurfaceItem implements Movable, Rotatable, Autono
     }
 
     public findPath(location: Location): Location[] | null {
-        console.log('path find starts');
-
         const currentLocation = this.location!;
         const dimensions = this._surface?.getDimensions();
         const visted = GridUtils.initializeGrid(dimensions?.width!, dimensions?.height!, 0);
@@ -39,7 +37,6 @@ export class Robot extends BaseSurfaceItem implements Movable, Rotatable, Autono
                 while (cur && (cur.x !== currentLocation.x || cur.y !== currentLocation.y)) {
                     path.push({ ...cur });
                     cur = parent[cur.x][cur.y];
-                    console.log(cur);
                 }
                 if (cur) {
                     path.push(currentLocation);
